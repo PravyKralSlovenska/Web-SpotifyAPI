@@ -1,0 +1,24 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+body{
+    color: #EEEEEE;
+    background-color: rgb(0, 0, 0);
+    font-family: 'CustomAeonik';
+}
+
+@font-face {
+    font-family: 'CustomAeonik-Bold';
+    src: url('/public/AEONIKPROTRIAL-BOLD.OTF') format('opentype');
+}
+
+@font-face {
+    font-family: "CustomAeonik-Light";    
+    src: url('/public/AEONIKPROTRIAL-LIGHT.OTF') format('opentype');
+}
+
+@font-face {
+    font-family: "CustomAeonik";
+    src: url('/public/AEONIKPROTRIAL-REGULAR.OTF') format('opentype');
+}
