@@ -12,8 +12,8 @@ function SearchField() {
     setQuery(event.target.value);
   };
 
-  const clientID = '62f808e87402408b9bcb42e3684b1c10';
-  const clientSecret = 'ca5ae99bcdfd4905a10b4bae10f5fa7b';
+  const clientID = '';
+  const clientSecret = '';
   const credentials = btoa(`${clientID}:${clientSecret}`);  //base64 encoding
 
 // tato async funkcia ziska token z Spotify API cez client credentials
