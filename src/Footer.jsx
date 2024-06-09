@@ -1,13 +1,46 @@
 function Footer(){
+
+    // nefunguje
+    // try {
+    //     document.getElementById('form').addEventListener('submit', (e) => {
+    //         e.preventDefault();
+    //         const input = document.getElementById('input');
+    //         if (input.value === '') {
+    //             alert('Please enter your email');
+    //         } else {
+    //             alert('Thank you for subscribing');
+    //             document.getElementById('form').reset();
+    //         }
+    //     });
+
+    //     // function sendEmail() {
+    //     //     Email.send({
+    //     //         Host: "smtp.gmail.com",
+    //     //         Username: "sender@email_address.com",
+    //     //         Password: "Enter your password",
+    //     //         To: 'receiver@email_address.com',
+    //     //         From: "sender@email_address.com",
+    //     //         Subject: "Sending Email using javascript",
+    //     //         Body: "Well that was easy!!",
+    //     //     })
+    //     //         .then(function (message) {
+    //     //             alert("mail sent successfully")
+    //     //         });
+    //     // }
+    // }
+    // catch (e) {
+    //     console.error('Failed to add event listener to form', e);
+    // }
+
     return (
         <footer className="bg-black">
             <hr className="border-t-2 border-MojaZlta" />
             <div className="flex justify-center">
                 <div className="flex m-2">
-                    <form className="rounded p-5 mr-4">
+                    <form className="rounded p-5 mr-4" id="form">
                         <label className="text-2xl block">Subscribe to our newsletter</label>
                         <div className="flex">
-                            <input type="email" placeholder="Enter your email" className="block mr-2 text-black"></input>
+                            <input type="email" placeholder="Enter your email" className="block mr-2 text-black" id="input"></input>
                             <button className="block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">Subscribe</button>
                         </div>
                     </form>

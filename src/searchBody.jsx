@@ -4,18 +4,28 @@ function SearchBody() {
 
   function get_sessionStorage()
   {    
+    // z session storage (premenna prehliadaca) si vytiahneme searchResults a searchType
     let searchResults = sessionStorage.getItem('searchResults');
     let searchType = sessionStorage.getItem('searchType');
-    // let query = sessionStorage.getItem('query');
 
+    // ak v session storage nic nie je, tak sa nieco pokazilo a vratime sa :)
+    if (!searchResults || !searchType) {
+      console.log("error v get_sessionStorage");
+      return;
+    }
+
+    // ak v session storage predsa len nieco tak to prevedieme na JSON a ziskame itemy
     searchResults = JSON.parse(searchResults);
 
     console.log(searchResults, searchType)
     
     searchResults = searchResults[searchType].items;
+
+    // vraticame itemy
     return searchResults;
   }
 
+  // funkcia na zobrazenie vysledkov
   function displayResults() {
   let results = get_sessionStorage();
   let searchType = sessionStorage.getItem('searchType');
@@ -23,7 +33,7 @@ function SearchBody() {
   let resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = '';
 
-  // Adding styling for the results container to center items
+  // nejake styly pre vysledky
   resultsDiv.style.display = 'grid';
   resultsDiv.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
   resultsDiv.style.gap = '20px';
@@ -31,17 +41,21 @@ function SearchBody() {
   resultsDiv.style.textAlign = 'center';
   resultsDiv.style.margin = '16px';
 
+  // ak results alebo searchType neexistuju, tak sa nieco pokazilo a vratime sa znova :D
   if (!results || !searchType) {
-    console.log("Nieco sa dojebalo");
+    console.log("error v displayResults");
     return;
   }
 
+
+  // pre kazdy vysledok vytvorime div a pridame ho do resultsDiv
   results.forEach((result) => {
     const underDiv = document.createElement('div');
     let content = '';
 
     const imageStyle = 'width: 200px; height: 200px; object-fit: cover;';
 
+    // podla typu vysledku vytvorime obsah divu
     switch (searchType) {
       case 'artists':
         content = `
@@ -100,17 +114,18 @@ function SearchBody() {
     underDiv.style.transition = 'transform 0.3s ease';
     underDiv.style.margin = '10px';
 
-    // Event listener to open a new page when the div is clicked
+    // ked na divko kliknes tak sa otvori spotify stranka
     underDiv.addEventListener('click', () => {
       window.open(result.external_urls.spotify, '_blank');
     });
 
-    // Adding hover animation
+    // hover animacie :3
     underDiv.addEventListener('mouseenter', () => {
       if (underDiv.querySelector('img')) {
         underDiv.querySelector('img').style.transform = 'scale(1.05)';
       }
     });
+
     underDiv.addEventListener('mouseleave', () => {
       if (underDiv.querySelector('img')) {
         underDiv.querySelector('img').style.transform = 'scale(1)';
@@ -121,12 +136,12 @@ function SearchBody() {
   });
 }
 
-  
   useEffect(() => {
     get_sessionStorage();
     displayResults();
   }, []);
 
+  // debug button
   function debug() 
   {
     let searchResults = sessionStorage.getItem('searchResults');
@@ -135,7 +150,6 @@ function SearchBody() {
 
     console.log(searchResults, searchType, query);
   }
-
 
   return (
     <>

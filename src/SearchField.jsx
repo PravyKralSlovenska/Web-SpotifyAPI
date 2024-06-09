@@ -12,63 +12,61 @@ function SearchField() {
     setQuery(event.target.value);
   };
 
-  const clientID = '';
-  const clientSecret = '';
-  const credentials = btoa(`${clientID}:${clientSecret}`);  //base64 encoding
+  // Spotify API credentials, ktore pouzivam v getToken() funkcii, aby som ziskal token
+  const clientID = '62f808e87402408b9bcb42e3684b1c10';
+  const clientSecret = 'ca5ae99bcdfd4905a10b4bae10f5fa7b';
 
-// tato async funkcia ziska token z Spotify API cez client credentials
+  const credentials = btoa(`${clientID}:${clientSecret}`);
+
+  // funkcia mi vrati token, ktory potrebujem na overenie
   async function getToken(){
     let spotify_token_url = 'https://accounts.spotify.com/api/token';
     let response_json = await fetch(spotify_token_url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': `Basic ${credentials}` 
-        },
-        // body: {...} sluzi na autentifikaciu/overenie
-        // UrlSearchParams sluzi na vytvorenie URL query string, a to je to co sa posiela na server
-        body: new URLSearchParams({ 
-            'grant_type': 'client_credentials'
-        })
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Basic ${credentials}`
+      },
+      // body: {...} sluzi na autentifikaciu/overenie
+      // UrlSearchParams sluzi na vytvorenie URL query string, a to je to co sa posiela na server
+      body: new URLSearchParams({ 'grant_type': 'client_credentials' })
     });
 
-    // ak je response/odpoved OK, tak len ziskame token
     if (response_json.ok) {
-        let data = await response_json.json();
-        // console.log(data)
-        let accessToken = data.access_token;
-        // console.log(accessToken);
-        return accessToken;
+      let data = await response_json.json();
+      let accessToken = data.access_token;
+      return accessToken;
     } else {
-        console.error('Failed to get access token');
-        return null;
+      console.error('nepodarilo sa ziskat token, status:', response_json.status);
+      return null;
     }
   }
 
+  // funkcia, ktora sa stara o vyhladavanie
   async function handleSearch() {
     const accessToken = await getToken();
     const searchTypeMap = {
       artists: 'artist',
-      // users: 'user', // netusim preco nejde fr
       tracks: 'tracks',
       playlists: 'playlist',
-      genres: '', // neda sa vyhladavat
       albums: 'album'
     };
   
     const mappedSearchType = searchTypeMap[searchType];
+    // ak sa nezhoduje searchType s nejakym typom, tak vypiseme chybu
     if (!mappedSearchType){
       console.error('Unsupported search type:', searchType);
       window.alert('Please choose a search type');
       return;
     }
-
-    // if statement to check if the input box is not empty
+    
+    // query/dopyt nemoze byt prazdny
     if (query === '') {
       window.alert('Please enter a search query');
       return;
     }
-  
+    
+    // ziskame vysledky vyhladavania, ked teda uz mame token a query a searchType mozme zavolat fetch, ktory nam vrati json]
     const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=${mappedSearchType}`, {
       method: 'GET',
       headers: {
@@ -78,59 +76,45 @@ function SearchField() {
   
     const searchData = await searchResponse.json();
 
-    // console.log(searchData);
-  
-    // Store search results in sessionStorage
-    sessionStorage.setItem('searchResults', JSON.stringify(searchData)); // JSON.stringify() converts a JavaScript object or value to a JSON string
+    // ulozim si vysledky do sessionStorage, aby som ich mohol zobrazit na dalsej stranke
+    sessionStorage.setItem('searchResults', JSON.stringify(searchData));
     sessionStorage.setItem('accessToken', accessToken);
     sessionStorage.setItem('searchType', searchType);
     sessionStorage.setItem('query', query);
-    
-    // let idk = sessionStorage.getItem('searchResults');
-    // idk = JSON.parse(idk);
-    // console.log(idk);
 
-    // Open the new window with results.html
-    // Redirect to searchResults.html in the same tab
     window.location.href = 'searchResults.html';
   };
 
   return (
-    <div className="flex flex-col items-center bg-black rounded-lg border-b-2 border-b-MojaZlta p-4">
-      <hr className="border-t-2 border-MojaZlta" />
-      <table>
-        <thead>
-          <h2 className="float-left font-Aeonik-bold text-4xl px-4 py-2">Searching for: </h2>
-        </thead>
-        <tbody className="flex items-center">
-          <select
-            name="typ"
-            id="typ"
-            onChange={handleSearchTypeChange}
-            className="bg-black text-white m-4 p-2 border-b-2 border-gray-300 focus:outline-none focus:border-violet-500"
-          >
-            <option value="Choose an option" className="">Choose an option</option>
-            <option value="artists">Artists</option>
-            <option value="albums">Albums</option>
-            <option value="tracks">Tracks</option>
-            <option value="playlists" className="">Playlists</option>
-            {/* <option value="users">Users</option> */}
-          </select>
-          <input
-            type="text"
-            placeholder={searchType ? `Searching for ${searchType}` : "Choose an option first"}
-            value={query}
-            onChange={handleQueryChange}
-            className="bg-black text-white mx-4 px-2 py-1 w-64 border-b-2 border-gray-300 focus:outline-none focus:border-violet-500"
-          />
-          <button
-            onClick={handleSearch}
-            className="bg-black text-white mx-4 px-4 py-1 border-b-2 border-gray-300 hover:border-violet-500 focus:outline-none focus:ring focus:ring-violet-300"
-          >
-            Search
-          </button>
-        </tbody>
-      </table>
+    <div className="flex flex-col items-center bg-black rounded-lg border-b-2 border-b-MojaZlta p-4 max-w-full sm:max-w-2xl mx-auto">
+      <h1 className='font-Aeonik-bold text-4xl text-left'>Searching for: </h1>
+      <div className="w-full flex flex-col sm:flex-row items-center">
+        <select
+          name="typ"
+          id="typ"
+          onChange={handleSearchTypeChange}
+          className="bg-black text-white m-4 p-2 border-b-2 border-gray-300 focus:outline-none focus:border-violet-500"
+        >
+          <option value="Choose an option">Choose an option</option>
+          <option value="artists">Artists</option>
+          <option value="albums">Albums</option>
+          <option value="tracks">Tracks</option>
+          <option value="playlists">Playlists</option>
+        </select>
+        <input
+          type="text"
+          placeholder={searchType ? `Searching for ${searchType}` : "Choose an option first"}
+          value={query}
+          onChange={handleQueryChange}
+          className="bg-black text-white mx-4 px-2 py-1 w-full sm:w-64 border-b-2 border-gray-300 focus:outline-none focus:border-violet-500"
+        />
+        <button
+          onClick={handleSearch}
+          className="bg-black text-white mx-4 px-4 py-1 border-b-2 border-gray-300 hover:border-violet-500 focus:outline-none focus:ring focus:ring-violet-300"
+        >
+          Search
+        </button>
+      </div>
       <hr className="border-t-2 border-MojaZlta" />
     </div>
   );
