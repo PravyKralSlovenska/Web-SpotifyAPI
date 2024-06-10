@@ -65,19 +65,20 @@ function SearchField() {
       window.alert('Please enter a search query');
       return;
     }
-    
-    switch (searchType) {
-      case 'artists':
-        break;
-    }
 
     // ziskame vysledky vyhladavania, ked teda uz mame token a query a searchType mozme zavolat fetch, ktory nam vrati json]
-    // const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=${mappedSearchType}`, {
-    const searchResponse = await fetch(`https://api.spotify.com/v1/${query}/${mappedSearchType}`, {
+    // const searchResponse = await fetch(`https://api.spotify.com/v1/${query}/${mappedSearchType}`, {
+    const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=${mappedSearchType}`, {
     method: 'GET',
       headers: {'Authorization': `Bearer ${accessToken}`}
     });
-  
+    
+    if (!searchResponse.ok) {
+      console.error('Search request failed with status:', searchResponse.status);
+      window.alert('Nieco sa pokazilo, skus znova neskor')
+      return;
+    }
+
     const searchData = await searchResponse.json();
 
     // ulozim si vysledky do sessionStorage, aby som ich mohol zobrazit na dalsej stranke

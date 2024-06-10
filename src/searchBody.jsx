@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 
 function SearchBody() {
-  const resultsDiv = document.getElementById('results');
-  
   function get_sessionStorage()
   {    
     // z session storage (premenna prehliadaca) si vytiahneme searchResults a searchType
@@ -34,6 +32,7 @@ function SearchBody() {
 
   // funkcia na zobrazenie vysledkov
   function displayResults() {
+    const resultsDiv = document.getElementById('results');
     let results = get_sessionStorage();
     let searchType = sessionStorage.getItem('searchType');
 
@@ -166,7 +165,7 @@ function SearchBody() {
     <div className='min-h-screen'>
       <h1 className='text-5xl font-Aeonik-bold block mt-20 px-6'>Search Results</h1>
       <div id="results"></div>
-      <button className="bg-black text-white py-2 px-6 rounded p-5" onClick={debug}>debug button</button>
+      <button className="bg-black text-white py-2 px-6 rounded p-5" onClick={debug}>debug button (konzola)</button>
     </div>
   );
 }
