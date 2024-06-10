@@ -88,6 +88,7 @@ function SearchField() {
   return (
     <div className="flex flex-col items-center bg-black rounded-lg border-b-2 border-b-MojaZlta p-4 max-w-full sm:max-w-2xl mx-auto">
       <h1 className='font-Aeonik-bold text-4xl text-left'>Searching for: </h1>
+      <label className='font-Aeonik-bold text-4xl text-left'>Searching for: </label>
       <div className="w-full flex flex-col sm:flex-row items-center">
         <select
           name="typ"
