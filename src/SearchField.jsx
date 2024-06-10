@@ -66,12 +66,16 @@ function SearchField() {
       return;
     }
     
+    switch (searchType) {
+      case 'artists':
+        break;
+    }
+
     // ziskame vysledky vyhladavania, ked teda uz mame token a query a searchType mozme zavolat fetch, ktory nam vrati json]
-    const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=${mappedSearchType}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
+    // const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=${mappedSearchType}`, {
+    const searchResponse = await fetch(`https://api.spotify.com/v1/${query}/${mappedSearchType}`, {
+    method: 'GET',
+      headers: {'Authorization': `Bearer ${accessToken}`}
     });
   
     const searchData = await searchResponse.json();
@@ -87,7 +91,6 @@ function SearchField() {
 
   return (
     <div className="flex flex-col items-center bg-black rounded-lg border-b-2 border-b-MojaZlta p-4 max-w-full sm:max-w-2xl mx-auto">
-      <h1 className='font-Aeonik-bold text-4xl text-left'>Searching for: </h1>
       <label className='font-Aeonik-bold text-4xl text-left'>Searching for: </label>
       <div className="w-full flex flex-col sm:flex-row items-center">
         <select

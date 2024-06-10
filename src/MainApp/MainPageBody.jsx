@@ -10,10 +10,10 @@ function MainPageBody() {
       ];      
   
     return (
-        <div className="flex-1 overflow-y-auto text-center relative">
+        <div className="flex-1 overflow-y-auto text-center relative min-h-screen">
             <img className="w-full blur-lg" src="./public/KanyeWestConcert.png" alt="concert" />
             <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-            <h1 className="font-sans text-2xl sm:text-4xl font-Aeonik-bold bg-gradient-to-r from-MojaRuzova to-MojaZlta hover:from-MojaZlta hover:to-MojaRuzova text-transparent bg-clip-text cursor-pointer duration-200">
+            <h1 className="m-8 font-sans text-2xl sm:text-4xl font-Aeonik-bold bg-gradient-to-r from-MojaRuzova to-MojaZlta hover:from-MojaZlta hover:to-MojaRuzova text-transparent bg-clip-text cursor-pointer duration-200">
                 {zoznam[Math.floor(Math.random() * zoznam.length)]}
             </h1>
             </div>
